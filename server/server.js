@@ -79,27 +79,27 @@ app.post('/verifyKey', (req, res) => {
 // --------------------------------
 
 
-// app.post('/createKeys', authenticate, (req, res) => {
-//   var year = req.body.year;
-//   var keynumber = req.body.keynumber;
+app.post('/createKeys', authenticate, (req, res) => {
+  var year = req.body.year;
+  var number = req.body.number;
 
-//   for (var i = 0; i < keynumber; i++) {
+  for (var i = 0; i < number; i++) {
 
-//     var licence = new Licence({
-//       key : shortid.generate(),
-//     _creator: req.user._id,
+    var licence = new Licence({
+      key : shortid.generate(),
+    _creator: req.user._id,
     
-//   });
+  });
 
-//       licence.save().then((doc) => {
-//     res.send(doc);
-//   }, (e) => {
-//     res.status(400).send(e);
-//   });
+      licence.save().then((doc) => {
+    res.send(doc);
+  }, (e) => {
+    res.status(400).send(e);
+  });
     
-//   };
+  };
 
-// });
+});
 
 app.post('/createKey', authenticate, (req, res) => {
   var key = shortid.generate();
@@ -121,7 +121,7 @@ app.post('/createKey', authenticate, (req, res) => {
 
 
 app.post('/getAllKey', authenticate, (req, res) => {
-  Licence.find().then((doc) => {
+  Licence.find({active : false}).then((doc) => {
     res.send({doc});
   }, (e) => {
     res.status(400).send(e);
@@ -201,18 +201,18 @@ app.post('/logoutUser', authenticate, (req, res) => {
   });
 });
 
-app.post('/registerUser', (req, res) => {
-  var body = _.pick(req.body, ['username', 'password']);
-  var user = new User(body);
+// app.post('/registerUser', (req, res) => {
+//   var body = _.pick(req.body, ['username', 'password']);
+//   var user = new User(body);
 
-  user.save().then(() => {
-    return user.generateAuthToken();
-  }).then((token) => {
-    res.header('x-auth', token).send({token,user});
-  }).catch((e) => {
-    res.status(400).send(e);
-  })
-});
+//   user.save().then(() => {
+//     return user.generateAuthToken();
+//   }).then((token) => {
+//     res.header('x-auth', token).send({token,user});
+//   }).catch((e) => {
+//     res.status(400).send(e);
+//   })
+// });
 
 
 // --------------------------------
